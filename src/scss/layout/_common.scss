@@ -1,0 +1,166 @@
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-family: 'Righteous', sans-serif;
+}
+
+h1 {
+    font-size: 3em;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div, p, a {
+    font-family: 'Lato', sans-serif;
+}
+
+p {
+    font-size: 1.3em;
+}
+
+a {
+    color: $c-highlight;
+}
+
+img {
+    display: block;
+}
+
+body, html {
+    height: 100%;
+}
+
+footer {
+    text-align: center;
+    opacity: 0.6;
+    margin-bottom: 2em;
+}
+
+
+/**
+ * Alignment
+ */
+
+.table {
+    display : table;
+    margin  : auto;
+    height  : 100%;
+
+    & > * {
+        display: table-cell;
+    }
+
+    & > *.h-center {
+        text-align: center;
+    }
+
+    & > *.v-center {
+        vertical-align: middle;
+    }
+
+}
+
+.center {
+    margin-left  : auto;
+    margin-right : auto;
+    display      : block;
+}
+
+/**
+ * Title Card
+ */
+.row.head {
+    height: 100%;
+    .column {
+        height     : 100%;
+        padding    : 0;
+        background : #0783D6;
+
+        background-image: -webkit-gradient(
+            linear,
+            right bottom,
+            left top,
+            color-stop(0.15, #86D3E3),
+            color-stop(0.81, #0783D6)
+        );
+        background-image: -o-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
+        background-image: -moz-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
+        background-image: -webkit-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
+        background-image: -ms-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
+        background-image: linear-gradient(to left top, #86D3E3 15%, #0783D6 81%);
+
+    }
+}
+
+.head .title {
+    //color: #030;
+    color: white;
+    height: 100%;
+
+    .content {
+        display   : block;
+        max-width : $max-column-width;
+        margin    : auto;
+        height    : 100%;
+    }
+
+    p {
+        font-size     : 1.45em;
+        text-align    : left;
+        margin-bottom : -2.4em;
+        margin-top    : 0;
+
+        @media screen and (max-width: $bp-medium) {
+            margin-bottom: -1.5em;
+        }
+
+        @media screen and (max-width: $bp-small) {
+            margin-bottom: -1em;
+        }
+    }
+
+    h1 {
+        text-align     : center;
+        text-transform : uppercase;
+        font-size      : 15em;
+        margin-top     : auto;
+        margin-bottom  : auto;
+
+        &:last-child {
+            margin-top: -0.45em;
+        }
+
+        @media screen and (max-width: $bp-medium) {
+            font-size : 9em;
+        }
+
+        @media screen and (max-width: $bp-small) {
+            font-size : 6em;
+        }
+    }
+
+}
+
+.no-js .head h1 {
+    display: block;
+}
+
+.arrow {
+    margin   : auto;
+    position : absolute;
+    bottom   : 1.33em;
+    left     : 0;
+    right    : 0;
+    height   : 64px;
+    fill     : #fff;
+    cursor   : pointer;
+    border: 3px solid white;
+    border-radius: 32px;
+
+    @media screen and (max-width: $bp-small) {
+        height: 46px;
+    }
+}

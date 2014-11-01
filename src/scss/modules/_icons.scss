@@ -1,0 +1,19 @@
+.social {
+    width           : 100%;
+    overflow        : auto;
+    display         : flex;
+    justify-content : space-around;
+    margin-top      : 1.67em;
+    margin-bottom   : 0.67em;
+
+    .icon {
+        opacity    : 0.7;
+        max-width  : 48px;
+        max-height : 48px;
+        float      : left;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

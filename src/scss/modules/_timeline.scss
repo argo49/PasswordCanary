@@ -1,0 +1,99 @@
+$bulletSize: 60px;
+$smallBulletSize: 30px;
+$lineWidth: 5px;
+
+.timeline-container {
+    width    : 100%;
+    position : relative;
+
+    .event {
+        margin-left : $bulletSize / 2;
+        border-left : $lineWidth solid $c-blue;
+    }
+
+    .event:last-child {
+        border       : none;
+        padding-left : 5px;
+    }
+
+    .event-date,
+    .event-title {
+        padding-left : 40px;
+        cursor       : pointer;
+    }
+
+    .event-title {
+        font-family : 'Righteous', sans-serif;
+        padding-top : 0.5em;
+    }
+
+    .event-description.active {
+        visibility : visible;
+        opacity    : 1;
+        max-height : 750px;
+    }
+
+    .event-description {
+        // Inactive
+        opacity    : 0;
+        max-height : 0;
+        transition : max-height 1s, opacity 1s;
+
+        overflow   : hidden;
+        clear      : left;
+        padding    : 30px 20px;
+
+        ul {
+            padding: 0;
+        }
+
+        li:first-child {
+            border: none;
+        }
+
+        li {
+            list-style-type: none;
+            display: inline-block;
+            &:first-child {
+                font-weight: bold;
+                background-color: transparent;
+                width: 100%;
+            }
+            margin: 5px;
+            padding: 5px;
+            border: 2px solid $c-blue;
+        }
+    }
+
+    .bullet {
+        //background-color : #7bd;
+        background-color   : #fff;
+        border             : 5px solid $c-blue;
+        height             : $bulletSize;
+        width              : $bulletSize;
+        border-radius      : $bulletSize;
+        margin-left        : -($bulletSize / 2) - ($lineWidth / 2);
+        float              : left;
+        //color            : #fff;
+        text-align         : center;
+        padding            : 5px;
+        cursor             : pointer;
+
+        .month, .year {
+            font-family: 'Righteous', sans-serif;
+        }
+
+    }
+}
+
+.click-me {
+    font-family : 'Righteous', sans-serif;
+    position    : absolute;
+    left        : -5em;
+    top         : 1.3em;
+    color       : $c-blue;
+
+    @media screen and (max-width: $bp-large) {
+        display : none;
+    }
+}

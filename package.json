@@ -1,0 +1,31 @@
+{
+  "name": "tylerargo.com",
+  "version": "0.0.1",
+  "description": "My personal website",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "critical": "^0.1.6",
+    "gulp": "^3.8.7",
+    "gulp-autoprefixer": "^0.0.8",
+    "gulp-concat": "^2.3.4",
+    "gulp-minify-html": "^0.1.5",
+    "gulp-pleeease": "0.0.5",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.2",
+    "gulp-uglify": "^0.3.1"
+  },
+  "devDependencies": {
+    "gulp-autoprefixer": "0.0.8",
+    "gulp-concat": "^2.4.0",
+    "gulp-minify-html": "^0.1.5",
+    "gulp-pleeease": "0.0.5",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.3",
+    "gulp-uglify": "^0.3.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tyler Argo",
+  "license": "MIT"
+}
