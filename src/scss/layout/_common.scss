@@ -70,85 +70,6 @@ footer {
     display      : block;
 }
 
-/**
- * Title Card
- */
-.row.head {
-    height: 100%;
-    .column {
-        height     : 100%;
-        padding    : 0;
-        background : #0783D6;
-
-        background-image: -webkit-gradient(
-            linear,
-            right bottom,
-            left top,
-            color-stop(0.15, #86D3E3),
-            color-stop(0.81, #0783D6)
-        );
-        background-image: -o-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
-        background-image: -moz-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
-        background-image: -webkit-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
-        background-image: -ms-linear-gradient(left top, #86D3E3 15%, #0783D6 81%);
-        background-image: linear-gradient(to left top, #86D3E3 15%, #0783D6 81%);
-
-    }
-}
-
-.head .title {
-    //color: #030;
-    color: white;
-    height: 100%;
-
-    .content {
-        display   : block;
-        max-width : $max-column-width;
-        margin    : auto;
-        height    : 100%;
-    }
-
-    p {
-        font-size     : 1.45em;
-        text-align    : left;
-        margin-bottom : -2.4em;
-        margin-top    : 0;
-
-        @media screen and (max-width: $bp-medium) {
-            margin-bottom: -1.5em;
-        }
-
-        @media screen and (max-width: $bp-small) {
-            margin-bottom: -1em;
-        }
-    }
-
-    h1 {
-        text-align     : center;
-        text-transform : uppercase;
-        font-size      : 15em;
-        margin-top     : auto;
-        margin-bottom  : auto;
-
-        &:last-child {
-            margin-top: -0.45em;
-        }
-
-        @media screen and (max-width: $bp-medium) {
-            font-size : 9em;
-        }
-
-        @media screen and (max-width: $bp-small) {
-            font-size : 6em;
-        }
-    }
-
-}
-
-.no-js .head h1 {
-    display: block;
-}
-
 .arrow {
     margin   : auto;
     position : absolute;
@@ -203,7 +124,7 @@ button {
     text-align: center;
     position: absolute;
     opacity: 0;
-    top:40%;
+    top:50%;
     transform: translateY(-50%);
     width: 100%;
 
@@ -237,14 +158,79 @@ button {
     border-bottom: 1px solid lighten($c-primary, 50%);
 }
 
+
 .flip.row .column {
     height: 100%;
+    position: relative;
+}
+
+.email-wrapper {
+    height: 80%;
     position: relative;
 }
 
 .logo {
     display: inline-block;
     float: right;
+}
+
+.modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    top:0;
+
+    //display: none;
+
+    &:active {
+        display: block;
+    }
+
+    .content {
+        background-color: white;
+        padding: 2em;
+        border-radius: 5px;
+        width: 66%;
+        margin: auto;
+        display: block;
+        position: relative;
+        top:50%;
+        transform:translateY(-50%);
+
+        @media all and (max-width: 950px) {
+            width: 90%;
+
+            input {
+                width: 50%;
+            }
+        }
+    }
+
+    .form {
+        width: 100%;
+        overflow: auto;
+
+        input, button {
+            float: left;
+        }
+
+        input {
+            width: 70%;
+        }
+
+        button {
+            background-color: $c-yo;
+            border-color: $c-yo;
+
+            &:hover {
+                background-color: lighten($c-yo, 20%);
+                border-color: lighten($c-yo, 20%);
+            }
+        }
+
+    }
+
 }
 
 
@@ -260,6 +246,15 @@ button {
         width: 64px;
         margin: auto;
         display: block;
+    }
+
+    .title {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .email-item {
+        top: 35%;
     }
 
 

@@ -13,7 +13,7 @@
     <div class="container">
         <div class="row clearfix title">
             <div class="column full">
-                <h1>PasswordCanary <img class="logo" height="64px" width="64px" src="images/canary.svg"></h1>
+                <h1 class="title">PasswordCanary <img class="logo" height="64px" width="64px" src="images/canary.svg"></h1>
             </div>
         </div>
         <div class="row clearfix email">
@@ -30,33 +30,35 @@
         <div class="row clearfix flip">
             <div class="column full">
                 <h2>Compromised Email Addresses (<span class="counter"></span>)</h2>
-                <div class="email-item active">
+                <div class="email-wrapper">
+                    <div class="email-item active">
                     <div class="address">f<span>xxxx</span>k1@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k2@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k3@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k4@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k5@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k6@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
-                </div>
-                <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k7@<span>xxxxxxx</span>.com</div>
-                    <div class="timestamp">20 mins ago</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k2@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k3@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k4@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k5@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k6@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
+                    <div class="email-item">
+                        <div class="address">f<span>xxxx</span>k7@<span>xxxxxxx</span>.com</div>
+                        <div class="timestamp">20 mins ago</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,6 +66,16 @@
             <div class="column full">
                 <h2>About this Site</h2>
                 <p>Often times when databases are compromised, usernames, emails and passwords are taken from these databases and put on different websites and forums for everyone to see. We monitor these website to see if your email pops up, and we'll send you an email if that happens.</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal">
+        <div class="content">
+            <h2>We'll now notify <span></span> if we see that address show up publicly.</h2>
+            <h3>Have a Yo account? Get notified through Yo:</h3>
+            <div class="form">
+                <input class="input" id="yo" name="yo" type="text" placeholder="Yo Username"/>
+                <button type="submit">Warn Me Through Yo</button>
             </div>
         </div>
     </div>
@@ -93,6 +105,10 @@
 
             }
 
+            function showModal () {
+
+            }
+
             cycleAddresses();
 
             function cycleAddresses () {
@@ -100,8 +116,12 @@
                 console.log(time);
                 flipCycle = window.setTimeout(function () {
                     animateAddress();
-                    cycleAddresses();
                     incrementCount();
+
+                    // Get rid of this for prod
+                    if (count < 10) {
+                        cycleAddresses();
+                    }
                 }, time);
             }
 
@@ -109,11 +129,6 @@
                 count++;
                 var jqCounter = flip.find('h2 span');
                 jqCounter.text(count);
-            }
-
-            function clearCycle () {
-                window.clearInterval(flipCycle);
-                flipCycle = null;
             }
 
             function animateAddress () {
