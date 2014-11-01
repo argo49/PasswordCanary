@@ -1,6 +1,6 @@
 <?php
 
-require("twitmon/mysql.php");
+require("includes/mysql.php");
 
 $dbh = connect();
 
