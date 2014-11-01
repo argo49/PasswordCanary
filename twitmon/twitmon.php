@@ -51,7 +51,7 @@ function dumpidExists($dumpid){
 	//return $dumpid;
 }
 function checkTweets(){
-	require("libs/TwitterAPIExchange.php");
+	require("../libs/TwitterAPIExchange.php");
 	$settings = array(
 	    'oauth_access_token' => "",
 	    'oauth_access_token_secret' => "",
@@ -82,7 +82,18 @@ function checkTweets(){
 				preg_match_all($pattern, $string, $matches); //find matching pattern
 				$STH2 = $dbh->prepare("INSERT INTO `dumpemails` ( email ) values ( ?)");
 				foreach($matches[0] as $email){
-					$STH2->execute(array($email));
+					
+					if (strlen($email) > 4){
+
+						$splitmail = explode("@", $email);
+
+						$fuzzmail2 = explode(".", $splitmail[1]);
+
+						$fuzzmail  = substr($splitmail[0],0,2).str_repeat("*",mt_rand(3,6)).substr($splitmail[0],-2)."@".str_repeat("*",mt_rand(3,6)).".".end($fuzzmail2);
+
+					}
+										
+					$STH2->execute(array($fuzzmail));
 					$STH = $dbh->prepare("SELECT * FROM `subscribers` WHERE email = ?");
 					$STH->execute(array($email));
 
@@ -122,7 +133,7 @@ function checkTweets(){
 function notifAction($email, $dumpid){
 	
 
-	require("libs/mailgun/autoload.php");
+	require("../libs/mailgun/autoload.php");
 
 
 
