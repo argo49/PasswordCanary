@@ -19,6 +19,7 @@ div, p, a {
 
 p {
     font-size: 1.3em;
+    text-indent: 1.5em;
 }
 
 a {
@@ -199,14 +200,15 @@ button {
 
 .email-item {
     text-align: center;
-    display: none;
-
-    position: relative;
-    top: 30%;
+    position: absolute;
+    opacity: 0;
+    top:40%;
     transform: translateY(-50%);
+    width: 100%;
 
     &.active {
-        display: block;
+        transition: opacity 1s;
+        opacity: 1;
     }
 
     .timestamp {
@@ -236,4 +238,5 @@ button {
 
 .flip.row .column {
     height: 100%;
+    position: relative;
 }

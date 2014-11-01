@@ -19,7 +19,7 @@
         <div class="row clearfix email">
             <div class="column full">
                 <form>
-                    <label for="email">Enter the email that is associated to the account you wish to monitor for.</label>
+                    <label for="email">Enter the email address that is associated to the account(s) you wish to monitor.</label>
                     <div>
                         <input class="input" id="email" name="email" type="text" placeholder="Email"/>
                         <button type="submit">Warn Me</button>
@@ -29,29 +29,33 @@
         </div>
         <div class="row clearfix flip">
             <div class="column full">
-                <h2>Compromised Email Addresses</h2>
+                <h2>Compromised Email Addresses (<span class="counter"></span>)</h2>
                 <div class="email-item active">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k1@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
                 <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k2@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
                 <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k3@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
                 <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k4@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
                 <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k5@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
                 <div class="email-item">
-                    <div class="address">f<span>xxxx</span>k@<span>xxxxxxx</span>.com</div>
+                    <div class="address">f<span>xxxx</span>k6@<span>xxxxxxx</span>.com</div>
+                    <div class="timestamp">20 mins ago</div>
+                </div>
+                <div class="email-item">
+                    <div class="address">f<span>xxxx</span>k7@<span>xxxxxxx</span>.com</div>
                     <div class="timestamp">20 mins ago</div>
                 </div>
             </div>
@@ -67,10 +71,14 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            var title     = $('.row.title');
-            var emailForm = $('.row.email');
-            var flip      = $('.row.flip');
-            var jqWindow  = $(window);
+            var title         = $('.row.title');
+            var emailForm     = $('.row.email');
+            var flip          = $('.row.flip');
+            var jqWindow      = $(window);
+            var activeAddress = flip.find('.active');
+            var flipCycle;
+            // initial DB number
+            var count = 0;
 
             function adjustFlip () {
                 flip.height(jqWindow.height() - title.outerHeight() - emailForm.outerHeight());
@@ -81,6 +89,63 @@
                 adjustFlip();
             });
 
+            function loadAddresses () {
+
+            }
+
+            cycleAddresses();
+
+            function cycleAddresses () {
+                var time = Math.floor(Math.random() * 1500) + 500;
+                console.log(time);
+                flipCycle = window.setTimeout(function () {
+                    animateAddress();
+                    cycleAddresses();
+                    incrementCount();
+                }, time);
+            }
+
+            function incrementCount () {
+                count++;
+                var jqCounter = flip.find('h2 span');
+                jqCounter.text(count);
+            }
+
+            function clearCycle () {
+                window.clearInterval(flipCycle);
+                flipCycle = null;
+            }
+
+            function animateAddress () {
+                var nextAddress = getNextInList(activeAddress);
+
+                activeAddress.removeClass('active');
+
+                nextAddress.addClass('active');
+
+                activeAddress = nextAddress;
+
+            }
+
+            function getNextInList (item) {
+                var nextItem = item.next();
+
+                if (nextItem.length) {
+                    return nextItem;
+                } else {
+                    return flip.find('.email-item').first();
+                }
+            }
+
+            function getPrevInList (item) {
+                var prevItem = item.prev();
+
+                if (prevItem.length) {
+                    return prevItem;
+                } else {
+                    return flip.find('.email-item').last();
+                }
+            }
 
         });
     </script>
