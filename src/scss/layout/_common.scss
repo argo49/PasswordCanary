@@ -134,7 +134,7 @@ button {
     }
 
     .timestamp {
-        color: lighten($c-grey, 10%);
+        color: $c-grey;
     }
 
     .address {
@@ -181,9 +181,9 @@ button {
     background-color: rgba(0,0,0,0.8);
     top:0;
 
-    //display: none;
+    display: none;
 
-    &:active {
+    &.active {
         display: block;
     }
 
@@ -207,7 +207,7 @@ button {
         }
     }
 
-    .form {
+    form {
         width: 100%;
         overflow: auto;
 
@@ -222,6 +222,8 @@ button {
         button {
             background-color: $c-yo;
             border-color: $c-yo;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
 
             &:hover {
                 background-color: lighten($c-yo, 20%);
