@@ -70,7 +70,7 @@ function checkTweets(){
 		preg_match("/(.*) Emails: (.*)/", $tweet->text, $output);
 		$dumpid = explode("/",$output[1])[3];
 		if (!dumpidExists($dumpid)){
-			echo "New dump found $dumpid \n";
+			echo "NewDump $dumpid \n";
 			$STH = $dbh->prepare("INSERT INTO `dumpids` ( dumpid ) values ( ? )");
 			$STH->bindParam(1, $dumpid);
 			$STH->execute();
@@ -80,11 +80,22 @@ function checkTweets(){
 				$matches = array(); //create array
 				$pattern = '/[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.([A-Za-z0-9_-][A-Za-z0-9_]+)/'; //regex for pattern of e-mail address
 				preg_match_all($pattern, $string, $matches); //find matching pattern
-				//$STH = $dbh->prepare("INSERT INTO `dumpemails` ( email, dumpid ) values ( ?, ? )");
+				$STH2 = $dbh->prepare("INSERT INTO `dumpemails` ( email ) values ( ?)");
 				foreach($matches[0] as $email){
-					//$STH->execute(array($email, $dumpid));
+					$STH2->execute(array($email));
 					$STH = $dbh->prepare("SELECT * FROM `subscribers` WHERE email = ?");
 					$STH->execute(array($email));
+
+					//trim dumpemails to 500 records
+					$dbh->exec("DELETE FROM `dumpemails` WHERE id NOT IN (
+						  SELECT id
+						  FROM (
+						    SELECT id
+						    FROM `dumpemails`
+						    ORDER BY id DESC
+						    LIMIT 500 -- keep this many records
+						  ) foo
+						);");
 					//echo "$email\n";
 					$lastnotif = $STH->fetchAll();
 					//var_dump($lastnotif);
@@ -123,7 +134,7 @@ $dump = "http://t.com/".$dumpid;
 $replace = array($email, $dump);
 
 	# Now, compose and send your message.
-	$mg->sendMessage($domain, array('from'    => 'passwordcanary@sandbox256.mailgun.org', 
+	$mg->sendMessage($domain, array('from'    => 'alert@passwordcanary.jszym.com', 
 	                                'to'      =>  $email, 
 	                                'subject' => '[ACTION REQUIRED] Your Password Might be Compromised', 
 	                                'text'    => str_replace($tags, $replace, file_get_contents("detectEmail.txt")),
@@ -132,7 +143,7 @@ $replace = array($email, $dump);
 	$dbh = connect();
 	$STH = $dbh->prepare("UPDATE `subscribers` SET `lastnotif` = ? WHERE `email` = ?");
  	$STH->execute(array(time(), $email));
-	echo "watch out $email";
+	echo "EmailHit $email";
 
 
 
