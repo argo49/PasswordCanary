@@ -1,6 +1,6 @@
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
-    font-family: 'Righteous', sans-serif;
+    font-family: 'Trocchi', serif;
 }
 
 h1 {
@@ -163,4 +163,77 @@ footer {
     @media screen and (max-width: $bp-small) {
         height: 46px;
     }
+}
+
+input, button {
+    display: block;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+input#email {
+    $inputWidth: 80%;
+    float:left;
+    width: $inputWidth;
+
+    &+button {
+        float:left;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        width: 100% - $inputWidth;
+    }
+}
+
+button {
+    $lighten-percentage: 20%;
+    background-color: $c-primary;
+    border: 2px solid $c-primary;
+    border-radius: 5px;
+    color: white;
+
+    &:hover {
+        background-color: lighten($c-primary, $lighten-percentage);
+        border: 2px solid lighten($c-primary, $lighten-percentage);
+    }
+}
+
+.email-item {
+    text-align: center;
+    display: none;
+
+    position: relative;
+    top: 30%;
+    transform: translateY(-50%);
+
+    &.active {
+        display: block;
+    }
+
+    .timestamp {
+        color: lighten($c-grey, 10%);
+    }
+
+    .address {
+        font-family: 'Special Elite', cursive;
+        font-size: 2.5em;
+
+        span {
+            background-color: black;
+            margin: 0 0.2em;
+        }
+    }
+
+    & + h2 {
+        text-align: center;
+    }
+}
+
+.email.row {
+    padding: 1.7em;
+    border-top: 1px solid lighten($c-primary, 50%);
+    border-bottom: 1px solid lighten($c-primary, 50%);
+}
+
+.flip.row .column {
+    height: 100%;
 }
