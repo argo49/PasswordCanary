@@ -162,9 +162,14 @@ button {
 }
 
 .email.row {
-    padding: 1.7em;
-    border-top: 1px solid lighten($c-primary, 50%);
-    border-bottom: 1px solid lighten($c-primary, 50%);
+    padding: 2.5em 0;
+    h2 {
+        margin-top: 0;
+    }
+}
+
+.row:nth-last-child(1) {
+    padding: 2.5em 0;
 }
 
 
@@ -245,6 +250,20 @@ button {
 
 }
 
+.error {
+    color: red;
+    background-color: lighten(red, 35%);
+    padding: 5px;
+    border-radius: 5px;
+    top: 5px;
+    position: relative;
+    display: none;
+
+    &.active {
+        display: inline;
+    }
+}
+
 
 @media all and (max-width: 700px) {
     .email-item .address {
@@ -252,8 +271,8 @@ button {
     }
 }
 
-.row:nth-last-child(1) {
-    border-top: 1px solid lighten($c-primary, 50%);
+.row {
+    border-top: 1px solid white;
 }
 
 @media all and (max-width: 500px) {

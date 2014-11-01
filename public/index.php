@@ -21,31 +21,32 @@ session_start();
                 <h1 class="title">PasswordCanary <img class="logo" height="64px" width="64px" src="images/canary.svg"></h1>
             </div>
         </div>
-        <div class="row clearfix email">
-            <div class="column full">
-                <form>
-                    <input type="hidden" id="csrf" value="<?php echo $csrf; ?>" />
-                    <label for="email">Enter the email address that is associated to the account(s) you wish to monitor.</label>
-                    <div>
-                        <input class="input" id="email" name="email" type="text" placeholder="Email"/>
-
-                        <button id="register" class="email">Warn Me</button>
-                    </div>
-                </form>
-            </div>
-        </div>
         <div class="row clearfix flip">
             <div class="column full">
-                <h2>Compromised Email Addresses (<span class="counter"></span>)</h2>
+                <h2>Compromised Email Addresses (<span class="counter"></span>):</h2>
                 <div class="email-wrapper">
 
                 </div>
             </div>
         </div>
+        <div class="row clearfix email">
+            <div class="column full">
+                <h2>Don't let your email end up here ^</h2>
+                <form>
+                    <input type="hidden" id="csrf" value="<?php echo $csrf; ?>" />
+                    <label for="email">Enter the email address that is associated to the account(s) you wish to monitor.</label>
+                    <div>
+                        <input class="input" id="email" name="email" type="text" placeholder="Email"/>
+                        <button id="register" class="email">Warn Me</button>
+                    </div>
+                </form>
+                <label class="error">Error: Something went wrong</label>
+            </div>
+        </div>
         <div class="row clearfix">
             <div class="column full">
                 <h2>About this Site</h2>
-                <p>Often times when databases are compromised, usernames, emails and passwords are taken from these databases and put on different websites and forums for everyone to see. We monitor these website to see if your email pops up, and we'll send you an email if that happens.</p>
+                <p>Often times when databases are compromised, usernames, emails and passwords are taken from these databases and put on different websites and forums for everyone to see. We monitor these websites to see if your email pops up, and we'll send you an email if that happens.</p>
             </div>
         </div>
     </div>
@@ -74,6 +75,7 @@ session_start();
             var activeAddress = flip.find('.active');
             var modal         = $('.modal');
             var emailButton   = emailForm.find('button');
+            var errorBox      = emailForm.find('.error');
             var flipCycle;
             var count = 0;
             var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -100,33 +102,33 @@ session_start();
             $("#register").click(function(e){
                 e.preventDefault();
 
+                var emailAddr = $("#email").val();
+
+                if (!emailAddr || !emailRegex.test(emailAddr)) {
+                    error('You need to enter a valid email address.');
+                    return;
+                }
+
                 $.post( "register.php",{"email":$("#email").val(), "csrf":$("#csrf").val()}).done(function(data){
                     console.log(typeof data);
                     data = JSON.parse(data);
                     console.log(typeof data);
                     if (data.status == "success"){
 
-                        var emailAddr = $("#email").val();
-
-                        if (!emailAddr || !emailRegex.test(emailAddr)) {
-                            return;
-                        }
-                        // ajax email to DB
-                        // on success
-
+                        errorBox.removeClass('active');
                         modal.find('h2 span').text(emailAddr);
                         modal.addClass('active');
 
-                    }else{
-
-
+                    } else {
+                        error('Oops, something went wront on our end.');
                     }
-                });
+                });S
 
             });
 
-            function loadAddresses () {
-
+            function error (text) {
+                errorBox.addClass('active');
+                errorBox.text('Error: ' + text);
             }
 
             cycleAddresses();
@@ -194,6 +196,9 @@ session_start();
             fetchEmailGroup();
 
             function fetchEmailGroup () {
+                if (page > 49) {
+                    return;
+                }
                 $.ajax({
                   type: "POST",
                   url: "liveEmails.php?i=" + (page++),
