@@ -2,29 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-/**
-* Opens up a PDO connection to the PasswordCanary DB
-* @return Object PDO connection
-**/
-function connect(){
-	/*** mysql hostname ***/
-	$hostname = 'localhost';
-
-	/*** mysql username ***/
-	$username = 'root';
-
-	/*** mysql password ***/
-	$password = '';
-
-	try {
-	    $dbh = new PDO("mysql:host=$hostname;dbname=passwordCanary", $username, $password);
-
-
-	}catch(PDOException $e){
-		echo $e->getMessage();
-	}
-	return $dbh;
-}
+require("mysql.php");
 
 /**
 * Saves Dump Email
@@ -82,7 +60,18 @@ function checkTweets(){
 				preg_match_all($pattern, $string, $matches); //find matching pattern
 				$STH2 = $dbh->prepare("INSERT INTO `dumpemails` ( email ) values ( ?)");
 				foreach($matches[0] as $email){
-					$STH2->execute(array($email));
+					
+					if (strlen($email) > 4){
+
+						$splitmail = explode("@", $email);
+
+						$fuzzmail2 = explode(".", $splitmail[1]);
+
+						$fuzzmail  = substr($splitmail[0],0,2).str_repeat("*",mt_rand(3,6)).substr($splitmail[0],-2)."@".str_repeat("*",mt_rand(3,6)).".".end($fuzzmail2);
+
+					}
+										
+					$STH2->execute(array($fuzzmail));
 					$STH = $dbh->prepare("SELECT * FROM `subscribers` WHERE email = ?");
 					$STH->execute(array($email));
 
