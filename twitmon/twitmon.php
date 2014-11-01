@@ -2,29 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-/**
-* Opens up a PDO connection to the PasswordCanary DB
-* @return Object PDO connection
-**/
-function connect(){
-	/*** mysql hostname ***/
-	$hostname = 'localhost';
-
-	/*** mysql username ***/
-	$username = 'root';
-
-	/*** mysql password ***/
-	$password = '';
-
-	try {
-	    $dbh = new PDO("mysql:host=$hostname;dbname=passwordCanary", $username, $password);
-
-
-	}catch(PDOException $e){
-		echo $e->getMessage();
-	}
-	return $dbh;
-}
+require("mysql.php");
 
 /**
 * Saves Dump Email
@@ -51,7 +29,7 @@ function dumpidExists($dumpid){
 	//return $dumpid;
 }
 function checkTweets(){
-	require("../libs/TwitterAPIExchange.php");
+	require("libs/TwitterAPIExchange.php");
 	$settings = array(
 	    'oauth_access_token' => "",
 	    'oauth_access_token_secret' => "",
@@ -133,7 +111,7 @@ function checkTweets(){
 function notifAction($email, $dumpid){
 	
 
-	require("../libs/mailgun/autoload.php");
+	require("libs/mailgun/autoload.php");
 
 
 
