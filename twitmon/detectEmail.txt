@@ -1,0 +1,17 @@
+PasswordCanary (passwordcanary.jszym.com)
+==============
+
+We've detected that your password might have been compromised. 
+
+What should I do now?
+----------------------
+[1] Don't freak out :D
+[2] Visit all websites that you've used the email {**EMAIL**} for registration and change your password.
+[3] You can try visiting {**DUMP**} . There may be some information there regarding which website was comprimised.
+
+Why do you think I'm compromisd?
+---------------------------------
+We detected your email in a text file that we automatically determined to look suspiciously like a list of passwords and emails. For your personal reference, this file is located at {**DUMP**} .
+
+Stay Safe!
+PasswordCanary

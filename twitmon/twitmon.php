@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 /**
 * Opens up a PDO connection to the PasswordCanary DB
@@ -12,7 +14,7 @@ function connect(){
 	$username = 'root';
 
 	/*** mysql password ***/
-	$password = 'kMfnBRZD1f';
+	$password = '';
 
 	try {
 	    $dbh = new PDO("mysql:host=$hostname;dbname=passwordCanary", $username, $password);
@@ -51,10 +53,10 @@ function dumpidExists($dumpid){
 function checkTweets(){
 	require("libs/TwitterAPIExchange.php");
 	$settings = array(
-	    'oauth_access_token' => "[]",
-	    'oauth_access_token_secret' => "[]",
-	    'consumer_key' => "[]",
-	    'consumer_secret' => "[]"
+	    'oauth_access_token' => "",
+	    'oauth_access_token_secret' => "",
+	    'consumer_key' => "",
+	    'consumer_secret' => ""
 	);
 	$twitter = new TwitterAPIExchange($settings);
 	$url = 'https://api.twitter.com/1.1/search/tweets.json';
@@ -68,6 +70,7 @@ function checkTweets(){
 		preg_match("/(.*) Emails: (.*)/", $tweet->text, $output);
 		$dumpid = explode("/",$output[1])[3];
 		if (!dumpidExists($dumpid)){
+			echo "NewDump $dumpid \n";
 			$STH = $dbh->prepare("INSERT INTO `dumpids` ( dumpid ) values ( ? )");
 			$STH->bindParam(1, $dumpid);
 			$STH->execute();
@@ -77,9 +80,37 @@ function checkTweets(){
 				$matches = array(); //create array
 				$pattern = '/[A-Za-z0-9_-]+@[A-Za-z0-9_-]+\.([A-Za-z0-9_-][A-Za-z0-9_]+)/'; //regex for pattern of e-mail address
 				preg_match_all($pattern, $string, $matches); //find matching pattern
-				$STH = $dbh->prepare("INSERT INTO `dumpemails` ( email, dumpid ) values ( ?, ? )");
+				$STH2 = $dbh->prepare("INSERT INTO `dumpemails` ( email ) values ( ?)");
 				foreach($matches[0] as $email){
-					$STH->execute(array($email, $dumpid));
+					$STH2->execute(array($email));
+					$STH = $dbh->prepare("SELECT * FROM `subscribers` WHERE email = ?");
+					$STH->execute(array($email));
+
+					//trim dumpemails to 500 records
+					$dbh->exec("DELETE FROM `dumpemails` WHERE id NOT IN (
+						  SELECT id
+						  FROM (
+						    SELECT id
+						    FROM `dumpemails`
+						    ORDER BY id DESC
+						    LIMIT 500 -- keep this many records
+						  ) foo
+						);");
+					//echo "$email\n";
+					$lastnotif = $STH->fetchAll();
+					//var_dump($lastnotif);
+					//echo "\n";
+					
+
+					if(count($lastnotif) > 0){
+						$lastnotif = (int)$lastnotif[0]["lastnotif"];
+						//echo "lastnotif $lastnotif \n";
+						//echo "24 hours ".(60*60*24)."\n";
+						//echo "delta".(time() - $lastnotif)."\n";
+						if ((time() - $lastnotif) > (60*60*24) ){
+							notifAction($email, $dumpid);
+						}
+					}
 				}
 				
 			}
@@ -88,8 +119,38 @@ function checkTweets(){
 
 	}
 }
+function notifAction($email, $dumpid){
+	
+
+	require("libs/mailgun/autoload.php");
+
+
+
+	$mg = new Mailgun\Mailgun("");
+	$domain = "sandbox256.mailgun.org";
+
+$tags = array("{**EMAIL**}","{**DUMP**}");
+$dump = "http://t.com/".$dumpid;
+$replace = array($email, $dump);
+
+	# Now, compose and send your message.
+	$mg->sendMessage($domain, array('from'    => 'alert@passwordcanary.jszym.com', 
+	                                'to'      =>  $email, 
+	                                'subject' => '[ACTION REQUIRED] Your Password Might be Compromised', 
+	                                'text'    => str_replace($tags, $replace, file_get_contents("detectEmail.txt")),
+	                                'html'	  => str_replace($tags, $replace, file_get_contents("detectEmail.html"))	));
+	
+	$dbh = connect();
+	$STH = $dbh->prepare("UPDATE `subscribers` SET `lastnotif` = ? WHERE `email` = ?");
+ 	$STH->execute(array(time(), $email));
+	echo "EmailHit $email";
+
+
+
+}
 echo "<pre>";
 checkTweets();
 echo "</pre>";
+//saveDumpEmail(array("asd","asdasdas"));
 
 ?>
