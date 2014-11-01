@@ -182,6 +182,7 @@ input#email {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         width: 100% - $inputWidth;
+        min-width: 80px;
     }
 }
 
@@ -244,4 +245,38 @@ button {
 .logo {
     display: inline-block;
     float: right;
+}
+
+
+@media all and (max-width: 700px) {
+    .email-item .address {
+        font-size: 1.3em;
+    }
+}
+
+@media all and (max-width: 500px) {
+    .logo {
+        float: none;
+        width: 64px;
+        margin: auto;
+        display: block;
+    }
+
+
+    input#email {
+        width: 100%;
+        margin: 1em 0;
+        float: none;
+
+        &+button {
+            width: 50%;
+            margin: auto;
+            float: none;
+            display: block;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            padding: 10px;
+        }
+    }
+
 }
