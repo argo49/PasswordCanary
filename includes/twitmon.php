@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+ini_set('display_errors',1);
+error_reporting(E_ALL|E_STRICT);
 
 require("mysql.php");
 
@@ -108,32 +108,65 @@ function checkTweets(){
 				
 			}
 			
+		}else{
+			echo "deja vu $dumpid\n";
 		}
 
 	}
 }
 function notifAction($email, $dumpid){
 	
-
+	# MAILGUN NOTIF
 	require("../libs/mailgun/autoload.php");
-
-
-
+	
 	$mg = new Mailgun\Mailgun("");
 	$domain = "sandbox256.mailgun.org";
 
-$tags = array("{**EMAIL**}","{**DUMP**}");
-$dump = "http://t.com/".$dumpid;
-$replace = array($email, $dump);
+	$tags = array("{**EMAIL**}","{**DUMP**}");
+	$dump = "http://t.co/".$dumpid;
+	$replace = array($email, $dump);
 
-	# Now, compose and send your message.
 	$mg->sendMessage($domain, array('from'    => 'alert@passwordcanary.jszym.com', 
 	                                'to'      =>  $email, 
 	                                'subject' => '[ACTION REQUIRED] Your Password Might be Compromised', 
 	                                'text'    => str_replace($tags, $replace, file_get_contents("detectEmail.txt")),
 	                                'html'	  => str_replace($tags, $replace, file_get_contents("detectEmail.html"))	));
 	
+	# YO NOTIF
+	$apiKey = '';
+
+	
 	$dbh = connect();
+	$STH = $dbh->prepare("SELECT * FROM `subscribers` WHERE email = ?");
+	$STH->bindParam(1, $email);
+
+	if ($STH->execute()){
+		$yoUser = $STH->fetch();
+		$yoUser = $yoUser["yo"];
+		var_dump($email);
+		var_dump($yoUser);
+
+		$link = 'http://passwordcanary.jszym.com/comprimiseMsg.php?email='.urlencode($email)."&dump=".urlencode($dumpid);
+
+		$url = 'http://api.justyo.co/yo/';
+		$data = array('api_token' => $apiKey, 'username' => $yoUser, 'link'=>$link);
+
+		$options = array(
+		    'http' => array(
+		        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+		        'method'  => 'POST',
+		        'content' => http_build_query($data),
+		    ),
+		);
+		$context  = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);
+
+
+	}  
+
+
+	# DB UPDATE
+	
 	$STH = $dbh->prepare("UPDATE `subscribers` SET `lastnotif` = ? WHERE `email` = ?");
  	$STH->execute(array(time(), $email));
 	echo "EmailHit $email\n";
