@@ -172,6 +172,10 @@ button {
     padding: 2.5em 0;
 }
 
+.row:nth-child(1) {
+    border-top: none;
+}
+
 
 .flip.row .column {
     height: 100%;

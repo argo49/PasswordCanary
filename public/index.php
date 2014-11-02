@@ -55,8 +55,9 @@ session_start();
             <h2>We'll now notify <span></span> if we see that address show up publicly.</h2>
             <h3>Have a Yo account? Get notified through Yo:</h3>
             <form>
+                <input type="hidden" id="csrf" value="<?php echo $csrf; ?>" />
                 <input class="input" id="yo" name="yo" type="text" placeholder="Yo Username"/>
-                <button type="submit">Warn Me Through Yo</button>
+                <button id="yo-button">Warn Me Through Yo</button>
             </form>
         </div>
     </div>
@@ -122,7 +123,33 @@ session_start();
                     } else {
                         error('Oops, something went wront on our end.');
                     }
-                });S
+                });
+
+            });
+
+            $('#yo-button').click(function(e){
+                e.preventDefault();
+
+                var yo = $('#yo').val();
+
+                if (!yo) {
+                    //error
+                    return;
+                }
+
+                $.post( "yoRegister.php",{"email":$("#email").val(), "csrf":$("#csrf").val(), "yo":yo}).done(function(data){
+                    console.log(typeof data);
+                    data = JSON.parse(data);
+                    console.log(typeof data);
+                    if (data.status == "success"){
+
+                        errorBox.removeClass('active');
+                        modal.removeClass('active');
+
+                    } else {
+                        error('Oops, something went wront on our end.');
+                    }
+                });
 
             });
 
@@ -136,6 +163,11 @@ session_start();
             function cycleAddresses () {
                 var time = Math.floor(Math.random() * 1500) + 500;
                 flipCycle = window.setTimeout(function () {
+
+                    if (page > 49) {
+                        return;
+                    }
+
                     if (animateAddress()) {
                         incrementCount();
                     }
